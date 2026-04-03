@@ -3,11 +3,9 @@ server:
 
 spring:
   datasource:
-    # 🌟 Notice the port changed to 5433 for your local Docker setup
     url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/smartschool}
     username: ${DB_USERNAME:postgres}
-    # 🌟 Change "your_local_password" to whatever password you actually use on your laptop
-    password: ${DB_PASSWORD:your_local_password}
+    password: ${DB_PASSWORD:secret}
   jpa:
     hibernate:
       ddl-auto: update
