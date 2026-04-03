@@ -3,10 +3,11 @@ server:
 
 spring:
   datasource:
-    # 🌟 If DATABASE_URL is provided by the cloud, use it. Otherwise, fallback to localhost.
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/smartschool}
+    # 🌟 Notice the port changed to 5433 for your local Docker setup
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/smartschool}
     username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres} # Change this back to your local password if it's different!
+    # 🌟 Change "your_local_password" to whatever password you actually use on your laptop
+    password: ${DB_PASSWORD:your_local_password}
   jpa:
     hibernate:
       ddl-auto: update
