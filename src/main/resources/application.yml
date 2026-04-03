@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5433/smartschool}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:secret}
+    url: jdbc:postgresql://localhost:5433/smartschool
+    username: postgres
+    password: secret
   jpa:
     hibernate:
       ddl-auto: update
