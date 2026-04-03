@@ -1,9 +1,12 @@
 package com.smartschool.api.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +22,8 @@ import java.io.IOException;
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
+
     @Autowired
     private JwtUtils jwtUtils;
 
@@ -29,19 +34,12 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            // 1. Get the token from the request
             String jwt = parseJwt(request);
 
-            // 2. If the token exists and is valid, authenticate the user
             if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-
-                // Extract the email/username from the token
                 String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
-                // Load the user's details from the database
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                // Create an authentication object
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 userDetails,
@@ -49,26 +47,26 @@ public class JwtFilter extends OncePerRequestFilter {
                                 userDetails.getAuthorities());
 
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                // 3. Save the authenticated user in Spring's Security Context
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+        } catch (ExpiredJwtException e) {
+            // 🌟 POLISH: Specifically catch expired tokens
+            logger.error("JWT token is expired: {}", e.getMessage());
+            // You could optionally set a custom header here to tell the frontend to log out
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return; // Stop the filter chain here
         } catch (Exception e) {
-            System.err.println("Cannot set user authentication: " + e.getMessage());
+            logger.error("Cannot set user authentication: {}", e.getMessage());
         }
 
-        // 4. Continue filtering the request to its final destination (the Controller)
         filterChain.doFilter(request, response);
     }
 
-    // Helper method to extract the "Bearer " token from the Authorization header
     private String parseJwt(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
-
         if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7); // Removes "Bearer " prefix and returns just the token
+            return headerAuth.substring(7);
         }
-
         return null;
     }
 }

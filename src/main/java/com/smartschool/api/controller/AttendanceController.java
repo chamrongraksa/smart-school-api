@@ -1,61 +1,53 @@
 package com.smartschool.api.controller;
 
+import com.smartschool.api.dto.AttendanceRequest;
+import com.smartschool.api.dto.AttendanceResponse;
 import com.smartschool.api.entity.Attendance;
 import com.smartschool.api.entity.Enrollment;
 import com.smartschool.api.repository.AttendanceRepository;
 import com.smartschool.api.repository.EnrollmentRepository;
+import com.smartschool.api.service.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.Map;
-
+import java.util.List;
+import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/attendance")
-// 🌟 Change it from "http://localhost:3000" to allow all traffic (perfect for a school project)
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class AttendanceController {
 
-    private final AttendanceRepository attendanceRepository;
-    private final EnrollmentRepository enrollmentRepository;
+    private final AttendanceService attendanceService; // 🌟 Inject Service, not Repositories
 
-    // 🌟 NEW: Fetch all attendance records for a specific enrollment
     @GetMapping("/enrollment/{enrollmentId}")
-    public ResponseEntity<?> getAttendance(@PathVariable Long enrollmentId) {
-        try {
-            Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
-                    .orElseThrow(() -> new RuntimeException("Enrollment not found"));
+    public ResponseEntity<List<AttendanceResponse>> getAttendance(@PathVariable Long enrollmentId) {
+        List<Attendance> records = attendanceService.getAttendanceByEnrollment(enrollmentId);
 
-            // Uses the finder method we wrote in the Repository earlier!
-            return ResponseEntity.ok(attendanceRepository.findByEnrollment(enrollment));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Failed to fetch attendance: " + e.getMessage());
-        }
+        List<AttendanceResponse> response = records.stream()
+                .map(att -> new AttendanceResponse(
+                        att.getId(),
+                        enrollmentId,
+                        att.getStatus(),
+                        att.getDate(),
+                        att.getEnrollment().getStudent().getName()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<?> markAttendance(@RequestBody Map<String, String> request) {
-        try {
-            Long enrollmentId = Long.parseLong(request.get("enrollmentId"));
-            String status = request.get("status"); // We expect "PRESENT", "LATE", or "ABSENT"
+    public ResponseEntity<AttendanceResponse> markAttendance(@RequestBody AttendanceRequest request) {
+        Attendance saved = attendanceService.markAttendance(request.getEnrollmentId(), request.getStatus());
 
-            // 1. Find the specific student's enrollment record
-            Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
-                    .orElseThrow(() -> new RuntimeException("Enrollment not found"));
-
-            // 2. Create the attendance record for today
-            Attendance attendance = new Attendance();
-            attendance.setEnrollment(enrollment);
-            attendance.setStatus(status);
-            attendance.setDate(LocalDate.now()); // Automatically grabs today's date
-
-            // 3. Save to the database
-            return ResponseEntity.ok(attendanceRepository.save(attendance));
-
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Failed to mark attendance: " + e.getMessage());
-        }
+        return ResponseEntity.ok(new AttendanceResponse(
+                saved.getId(),
+                request.getEnrollmentId(),
+                saved.getStatus(),
+                saved.getDate(),
+                saved.getEnrollment().getStudent().getName()
+        ));
     }
 }

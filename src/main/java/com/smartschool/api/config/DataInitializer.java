@@ -26,30 +26,46 @@ public class DataInitializer implements CommandLineRunner {
 
         // 1. Ensure Master Admin Exists
         if (userRepository.findByEmail("admin@school.com").isEmpty()) {
-            User admin = new User(null, "System Administrator", "admin@school.com", passwordEncoder.encode("admin123"), Role.ADMIN);
+            // 🌟 FIX: Use the Builder Pattern instead of the broken constructor
+            User admin = User.builder()
+                    .name("System Administrator")
+                    .email("admin@school.com")
+                    .passwordHash(passwordEncoder.encode("admin123"))
+                    .role(Role.ADMIN)
+                    .build();
             userRepository.save(admin);
         }
 
-        // 2. Ensure Test Environment Exists (Teacher, Student, Course, Enrollment)
+        // 2. Ensure Test Environment Exists
         if (courseRepository.count() == 0) {
             System.out.println("⚙️ Injecting Test Gradebook Data...");
 
-            // Create a Teacher
-            User teacher = new User(null, "Prof. Turing", "turing@school.com", passwordEncoder.encode("password123"), Role.TEACHER);
+            // Create a Teacher using Builder
+            User teacher = User.builder()
+                    .name("Prof. Turing")
+                    .email("turing@school.com")
+                    .passwordHash(passwordEncoder.encode("password123"))
+                    .role(Role.TEACHER)
+                    .build();
             userRepository.save(teacher);
 
-            // Create a Student
-            User student = new User(null, "Chamrong Raksa", "chamrong@school.com", passwordEncoder.encode("password123"), Role.STUDENT);
+            // Create a Student using Builder
+            User student = User.builder()
+                    .name("Chamrong Raksa")
+                    .email("chamrong@school.com")
+                    .passwordHash(passwordEncoder.encode("password123"))
+                    .role(Role.STUDENT)
+                    .build();
             userRepository.save(student);
 
-            // Create a Course using the Cambodian Curriculum
+            // Create a Course
             Course course = new Course();
-            course.setRoomClass("G-12A"); // The high school class room
-            course.setSubject("Information Communication Technology (ICT)"); // The official subject
+            course.setRoomClass("G-12A");
+            course.setSubject("Information Communication Technology (ICT)");
             course.setTeacher(teacher);
             courseRepository.save(course);
 
-            // Enroll the Student in the Course
+            // Enroll the Student
             Enrollment enrollment = new Enrollment();
             enrollment.setStudent(student);
             enrollment.setCourse(course);

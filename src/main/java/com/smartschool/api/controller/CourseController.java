@@ -9,19 +9,19 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/courses")
-@CrossOrigin(origins = "http://localhost:3000") // ⬅️ ADD THIS LINE!
 @RequiredArgsConstructor
 public class CourseController {
 
     private final CourseService courseService;
 
-    @PostMapping
-    public Course create(@RequestBody Course course) {
-        return courseService.createCourse(course);
-    }
-
+    // Use a CourseDTO here if Course has complex relationships
     @GetMapping
     public List<Course> list() {
         return courseService.getAllCourses();
+    }
+
+    @PostMapping
+    public Course create(@RequestBody Course course) {
+        return courseService.createCourse(course);
     }
 }
