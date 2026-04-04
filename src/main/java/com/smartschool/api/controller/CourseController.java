@@ -1,6 +1,3 @@
-        existingCourse.setRoomClass(updatedInfo.getRoomClass());
-        existingCourse.setSubject(updatedInfo.getSubject());
-    public ResponseEntity<?> updateCourse(@PathVariable String id, @RequestBody Course updatedInfo) {
 package com.smartschool.api.controller;
 
 import com.smartschool.api.entity.Course;
