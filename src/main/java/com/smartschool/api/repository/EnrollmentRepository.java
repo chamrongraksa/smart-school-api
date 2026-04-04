@@ -14,4 +14,7 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {
     // Find all students sitting in a specific course
     List<Enrollment> findByCourseId(Long courseId);
     List<Enrollment> findByStudent(User student);
+    List<Enrollment> findByCourseTeacherEmail(String email);
+
+    List<Enrollment> findByStudentEmail(String name);
 }

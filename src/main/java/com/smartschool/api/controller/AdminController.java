@@ -29,12 +29,17 @@ public class AdminController {
     private final EnrollmentRepository enrollmentRepository; // 🌟 NEW: Added to save enrollments
 
     @PostMapping("/users")
-    public ResponseEntity<?> createUser(@RequestBody User user) {
-        try {
-            return ResponseEntity.ok(userService.registerUser(user));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    public ResponseEntity<?> createUser(@RequestBody Map<String, String> request) {
+        User newUser = new User();
+        newUser.setName(request.get("name"));
+        newUser.setEmail(request.get("email"));
+        newUser.setRole(Role.valueOf(request.get("role")));
+
+        // 🌟 THE FIX: Map "password" (from Next.js) to "passwordHash" (the entity field)
+        String plainPassword = request.get("password");
+        newUser.setPasswordHash(plainPassword);
+
+        return ResponseEntity.ok(userService.registerUser(newUser));
     }
 
     @GetMapping("/teachers")
@@ -94,5 +99,10 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Failed to enroll: " + e.getMessage());
         }
+    }
+    @GetMapping("/enrollments")
+    public ResponseEntity<List<Enrollment>> getAllEnrollments() {
+        // This fetches all enrollments from the database and sends them to the dashboard
+        return ResponseEntity.ok(enrollmentRepository.findAll());
     }
 }
