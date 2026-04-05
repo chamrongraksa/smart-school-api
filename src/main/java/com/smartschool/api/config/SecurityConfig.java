@@ -75,7 +75,7 @@ public class SecurityConfig {
     // Add your exact Vercel URL and Localhost for testing
     configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:3000",
-            "https://smart-school-faxxpzo22-chamrongraksas-projects.vercel.app" // 👈 Updated to match your actual live URL!
+            "https://smart-school-faxxpzo22-chamrongraksas-projects.vercel.app"
     ));
 
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
