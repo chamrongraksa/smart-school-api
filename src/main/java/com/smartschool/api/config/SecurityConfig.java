@@ -72,10 +72,10 @@ public class SecurityConfig {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
 
-    // Add your Vercel URL and Localhost for testing
+    // Add your exact Vercel URL and Localhost for testing
     configuration.setAllowedOrigins(Arrays.asList(
             "http://localhost:3000",
-            "https://smart-school-web-teal.vercel.app" // 👈 Replace with your actual Vercel URL
+            "https://smart-school-faxxpzo22-chamrongraksas-projects.vercel.app" // 👈 Updated to match your actual live URL!
     ));
 
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
