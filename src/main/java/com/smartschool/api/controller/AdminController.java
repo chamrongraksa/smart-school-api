@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/admin")
-// 🌟 Change it from "http://localhost:3000" to allow all traffic (perfect for a school project)
 @CrossOrigin(origins = "*")
 @RequiredArgsConstructor
 public class AdminController {
@@ -26,7 +25,7 @@ public class AdminController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
-    private final EnrollmentRepository enrollmentRepository; // 🌟 NEW: Added to save enrollments
+    private final EnrollmentRepository enrollmentRepository;
 
     @PostMapping("/users")
     public ResponseEntity<?> createUser(@RequestBody Map<String, String> request) {
@@ -35,7 +34,6 @@ public class AdminController {
         newUser.setEmail(request.get("email"));
         newUser.setRole(Role.valueOf(request.get("role")));
 
-        // 🌟 THE FIX: Map "password" (from Next.js) to "passwordHash" (the entity field)
         String plainPassword = request.get("password");
         newUser.setPasswordHash(plainPassword);
 
@@ -49,7 +47,6 @@ public class AdminController {
                 .collect(Collectors.toList()));
     }
 
-    // 🌟 NEW: Fetch only students for the dropdown
     @GetMapping("/students")
     public ResponseEntity<List<User>> getStudents() {
         return ResponseEntity.ok(userRepository.findAll().stream()
@@ -57,7 +54,6 @@ public class AdminController {
                 .collect(Collectors.toList()));
     }
 
-    // 🌟 NEW: Fetch all created classes for the dropdown
     @GetMapping("/courses")
     public ResponseEntity<List<Course>> getCourses() {
         return ResponseEntity.ok(courseRepository.findAll());
@@ -82,7 +78,6 @@ public class AdminController {
         }
     }
 
-    // 🌟 NEW: The bridge! Connects a student to a class
     @PostMapping("/enrollments")
     public ResponseEntity<?> enrollStudent(@RequestBody Map<String, String> request) {
         try {

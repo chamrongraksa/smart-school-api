@@ -27,7 +27,6 @@ public class EnrollmentController {
         String newGrade = body.get("grade");
         Enrollment updated = enrollmentService.updateGrade(id, newGrade);
 
-        // 🌟 Manual mapping to keep it safe and clean
         EnrollmentResponse response = new EnrollmentResponse(
                 updated.getId(),
                 updated.getStudent().getName(),

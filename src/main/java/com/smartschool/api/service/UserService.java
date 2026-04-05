@@ -26,7 +26,7 @@ public class UserService {
             throw new RuntimeException("Stop! That email is already taken!");
         }
 
-        // 🔐 Scramble the password! (Using the correct Getters/Setters)
+        // Scramble the password! (Using the correct Getters/Setters)
         user.setPasswordHash(passwordEncoder.encode(user.getPasswordHash()));
         return userRepository.save(user);
     }

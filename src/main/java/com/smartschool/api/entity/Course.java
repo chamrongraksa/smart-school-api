@@ -19,11 +19,9 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🌟 NEW: The specific classroom (e.g., "G-12A", "G-11B")
     @Column(name = "room_class", nullable = false)
     private String roomClass;
 
-    // 🌟 NEW: The Cambodian Curriculum Subject
     @Column(nullable = false)
     private String subject;
 

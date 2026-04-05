@@ -10,7 +10,7 @@ import java.security.Principal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/teacher") // 🌟 Matches the Next.js fetch URL perfectly
+@RequestMapping("/api/teacher")
 @RequiredArgsConstructor
 public class TeacherController {
 

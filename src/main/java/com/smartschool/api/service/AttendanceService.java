@@ -24,7 +24,7 @@ public class AttendanceService {
         return attendanceRepository.findByEnrollment(enrollment);
     }
 
-    @Transactional // 🌟 Ensures database integrity
+    @Transactional
     public Attendance markAttendance(Long enrollmentId, String status) {
         Enrollment enrollment = enrollmentRepository.findById(enrollmentId)
                 .orElseThrow(() -> new RuntimeException("Enrollment not found with ID: " + enrollmentId));

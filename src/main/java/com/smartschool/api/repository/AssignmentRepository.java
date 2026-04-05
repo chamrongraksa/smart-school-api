@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface AssignmentRepository extends JpaRepository<Assignment, Long> {
 
-    // 🌟 Automatically writes the SQL to find all assignments for a specific course
     List<Assignment> findByCourse(Course course);
 }

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AttendanceController {
 
-    private final AttendanceService attendanceService; // 🌟 Inject Service, not Repositories
+    private final AttendanceService attendanceService;
 
     @GetMapping("/enrollment/{enrollmentId}")
     public ResponseEntity<List<AttendanceResponse>> getAttendance(@PathVariable Long enrollmentId) {

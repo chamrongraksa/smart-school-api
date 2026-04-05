@@ -48,7 +48,6 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-            // 🌟 1. Enable CORS using the bean defined below
             .cors(Customizer.withDefaults())
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -67,12 +66,10 @@ public class SecurityConfig {
     return http.build();
   }
 
-  // 🌟 2. THE CORS POLISH: Restrict access to your specific Vercel URL
   @Bean
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
 
-    // 🌟 CHANGED: Use Patterns with a wildcard to allow absolutely any frontend URL
     configuration.setAllowedOriginPatterns(Arrays.asList("*"));
 
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));

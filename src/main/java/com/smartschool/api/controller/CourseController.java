@@ -14,7 +14,6 @@ public class CourseController {
 
     private final CourseService courseService;
 
-    // Use a CourseDTO here if Course has complex relationships
     @GetMapping
     public List<Course> list() {
         return courseService.getAllCourses();

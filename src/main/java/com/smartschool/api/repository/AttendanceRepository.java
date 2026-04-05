@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Long> {
 
-    // 🌟 Automatically writes the SQL to fetch a student's attendance record for a specific class
     List<Attendance> findByEnrollment(Enrollment enrollment);
 }

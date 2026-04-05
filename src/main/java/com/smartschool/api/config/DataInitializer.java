@@ -26,7 +26,6 @@ public class DataInitializer implements CommandLineRunner {
 
         // 1. Ensure Master Admin Exists
         if (userRepository.findByEmail("admin@school.com").isEmpty()) {
-            // 🌟 FIX: Use the Builder Pattern instead of the broken constructor
             User admin = User.builder()
                     .name("System Administrator")
                     .email("admin@school.com")

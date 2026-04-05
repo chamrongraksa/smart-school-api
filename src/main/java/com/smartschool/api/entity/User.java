@@ -1,12 +1,12 @@
 package com.smartschool.api.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore; // 🌟 ADD THIS
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp; // 🌟 FOR AUDITING
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor // Keep this for JPA
 @AllArgsConstructor // Keep this for internal use
-@Builder // 🌟 Pro-tip: This makes creating users much easier!
+@Builder
 public class User {
 
     @Id
@@ -35,7 +35,6 @@ public class User {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    // 🌟 ADD THIS MANUAL CONSTRUCTOR for your Registration logic
     public User(String name, String email, String passwordHash, Role role) {
         this.name = name;
         this.email = email;

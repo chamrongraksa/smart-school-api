@@ -18,14 +18,12 @@ public class AssignmentService {
     private final AssignmentRepository assignmentRepository;
     private final CourseRepository courseRepository;
 
-    // 🌟 For Students: View assignments for their specific course
     public List<Assignment> getAssignmentsByCourse(Long courseId) {
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
         return assignmentRepository.findByCourse(course);
     }
 
-    // 🌟 For Teachers: Create a new task
     @Transactional
     public Assignment createAssignment(Long courseId, String title, String description, String dueDate) {
         Course course = courseRepository.findById(courseId)

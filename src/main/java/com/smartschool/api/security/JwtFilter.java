@@ -50,7 +50,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (ExpiredJwtException e) {
-            // 🌟 POLISH: Specifically catch expired tokens
             logger.error("JWT token is expired: {}", e.getMessage());
             // You could optionally set a custom header here to tell the frontend to log out
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -11,5 +11,5 @@ public class AttendanceResponse {
     private Long enrollmentId;
     private String status;
     private LocalDate date;
-    private String studentName; // 🌟 Nice to have for the frontend
+    private String studentName;
 }
