@@ -72,17 +72,14 @@ public class SecurityConfig {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
 
-    // Add your exact Vercel URL and Localhost for testing
-    configuration.setAllowedOrigins(Arrays.asList(
-            "http://localhost:3000",
-            "https://smart-school-faxxpzo22-chamrongraksas-projects.vercel.app"
-    ));
+    // 🌟 CHANGED: Use Patterns with a wildcard to allow absolutely any frontend URL
+    configuration.setAllowedOriginPatterns(Arrays.asList("*"));
 
     configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
     configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
     configuration.setExposedHeaders(List.of("Authorization"));
     configuration.setAllowCredentials(true);
-    configuration.setMaxAge(3600L); // Cache pre-flight for 1 hour
+    configuration.setMaxAge(3600L);
 
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
